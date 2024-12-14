@@ -1,34 +1,26 @@
 <template>
-  <TransitionGroup
-    name="pizza-filling"
-    enter-class="pizza-filling--enter"
-    enter-active-class="pizza-filling--enter-active"
-    leave-active-class="pizza-filling--leave-active"
-    leave-to-class="pizza-filling--leave-to"
-  >
-    <span
+  <div>
+    <div
       v-for="i in quantity"
       :key="i"
       class="pizza-filling"
       :class="{
-        [`pizza-filling--ingredient--${id}`]: true,
+        [`pizza-filling--${alias}`]: true,
         'pizza-filling--second': i === 2,
         'pizza-filling--third': i === 3,
       }"
     />
-  </TransitionGroup>
+  </div>
 </template>
 
 <script>
 export default {
   name: "BuilderPizzaFilling",
-
   props: {
-    id: {
-      type: Number,
+    alias: {
+      type: String,
       required: true,
     },
-
     quantity: {
       type: Number,
       required: true,
@@ -37,7 +29,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .pizza-filling {
   position: absolute;
   top: 0;
@@ -60,76 +52,64 @@ export default {
     transform: rotate(-45deg);
   }
 
-  &--ingredient--1 {
-    background-image: url("~@/assets/img/filling-big/mushrooms.svg");
-  }
-
-  &--ingredient--2 {
-    background-image: url("~@/assets/img/filling-big/cheddar.svg");
-  }
-
-  &--ingredient--3 {
-    background-image: url("~@/assets/img/filling-big/tomatoes.svg");
-  }
-
-  &--ingredient--4 {
-    background-image: url("~@/assets/img/filling-big/salmon.svg");
-  }
-
-  &--ingredient--5 {
-    background-image: url("~@/assets/img/filling-big/mozzarella.svg");
-  }
-
-  &--ingredient--6 {
-    background-image: url("~@/assets/img/filling-big/parmesan.svg");
-  }
-
-  &--ingredient--7 {
-    background-image: url("~@/assets/img/filling-big/salami.svg");
-  }
-
-  &--ingredient--8 {
-    background-image: url("~@/assets/img/filling-big/ham.svg");
-  }
-
-  &--ingredient--9 {
+  &--ananas {
     background-image: url("~@/assets/img/filling-big/ananas.svg");
   }
 
-  &--ingredient--10 {
-    background-image: url("~@/assets/img/filling-big/blue_cheese.svg");
-  }
-
-  &--ingredient--11 {
+  &--bacon {
     background-image: url("~@/assets/img/filling-big/bacon.svg");
   }
 
-  &--ingredient--12 {
-    background-image: url("~@/assets/img/filling-big/onion.svg");
+  &--blue_cheese {
+    background-image: url("~@/assets/img/filling-big/blue_cheese.svg");
   }
 
-  &--ingredient--13 {
+  &--cheddar {
+    background-image: url("~@/assets/img/filling-big/cheddar.svg");
+  }
+
+  &--chile {
     background-image: url("~@/assets/img/filling-big/chile.svg");
   }
 
-  &--ingredient--14 {
+  &--ham {
+    background-image: url("~@/assets/img/filling-big/ham.svg");
+  }
+
+  &--jalapeno {
     background-image: url("~@/assets/img/filling-big/jalapeno.svg");
   }
 
-  &--ingredient--15 {
+  &--mozzarella {
+    background-image: url("~@/assets/img/filling-big/mozzarella.svg");
+  }
+
+  &--mushrooms {
+    background-image: url("~@/assets/img/filling-big/mushrooms.svg");
+  }
+
+  &--olives {
     background-image: url("~@/assets/img/filling-big/olives.svg");
   }
 
-  &--enter-active,
-  &--leave-active {
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  &--onion {
+    background-image: url("~@/assets/img/filling-big/onion.svg");
   }
 
-  &--enter,
-  &--leave-to {
-    transform: scale(1.1);
+  &--parmesan {
+    background-image: url("~@/assets/img/filling-big/parmesan.svg");
+  }
 
-    opacity: 0;
+  &--salami {
+    background-image: url("~@/assets/img/filling-big/salami.svg");
+  }
+
+  &--salmon {
+    background-image: url("~@/assets/img/filling-big/salmon.svg");
+  }
+
+  &--tomatoes {
+    background-image: url("~@/assets/img/filling-big/tomatoes.svg");
   }
 }
 </style>

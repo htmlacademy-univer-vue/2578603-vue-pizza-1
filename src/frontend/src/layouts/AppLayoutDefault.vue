@@ -1,15 +1,12 @@
 <template>
   <div>
-    <AppLayoutHeader :content="content" :user="user" />
+    <AppLayoutHeader
+      :content="content"
+      :user="user"
+      @logout="$emit('logout')"
+    />
 
-    <Transition
-      name="slide"
-      :appear="$route.path !== '/login'"
-      appear-class="slide-appear"
-      appear-active-class="slide-appear-active"
-    >
-      <RouterView v-if="content" :content="content" :user="user" />
-    </Transition>
+    <RouterView :content="content" :user="user" @login="$emit('login')" />
   </div>
 </template>
 
@@ -18,20 +15,16 @@ import AppLayoutHeader from "@/layouts/AppLayoutHeader.vue";
 
 export default {
   name: "AppLayoutDefault",
-
   components: {
     AppLayoutHeader,
   },
-
   props: {
     content: {
       type: Object,
-      default: null,
+      required: true,
     },
-
     user: {
       type: Object,
-      default: null,
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <BaseLogo class="sidebar__logo" />
+    <BlockLogo class="sidebar__logo" />
 
     <RouterLink
       v-for="{ name, meta, path } of sideRoutes"
@@ -17,11 +17,9 @@
 <script>
 export default {
   name: "AppSidebar",
-
   computed: {
     sideRoutes() {
       const { routes } = this.$router.options;
-
       return routes.filter(
         ({ meta = {} }) => meta.layout === "AppLayoutWithSidebar"
       );
@@ -30,7 +28,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .sidebar {
   background-color: rgba($green-500, 0.05);
 }
@@ -40,8 +38,11 @@ export default {
   margin-bottom: 30px;
   padding-top: 10px;
   padding-bottom: 11px;
-  padding-left: 41px;
   background-color: $green-500;
+
+  img {
+    margin-left: 40px;
+  }
 }
 
 .sidebar__link {

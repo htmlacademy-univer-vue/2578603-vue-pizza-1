@@ -1,33 +1,37 @@
 <template>
   <div class="cart-status">
-    <BaseSubheading class="cart-status__title">
+    <BlockSubheading class="cart-status__title">
       Спасибо за заказ
-    </BaseSubheading>
+    </BlockSubheading>
 
-    <p class="cart-status__text">
-      Мы начали готовить Ваш заказ, скоро привезём его вам &semi;&rpar;
-    </p>
+    <p>Мы начали готовить Ваш заказ, скоро привезём его вам &semi;&rpar;</p>
 
-    <BaseButton class="cart-status__button" @click="$emit('close')">
+    <RouterLink class="cart-status__button button" :to="to">
       Отлично, я жду!
-    </BaseButton>
+    </RouterLink>
   </div>
 </template>
 
 <script>
 export default {
   name: "CartStatus",
+  props: {
+    to: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-status {
   text-align: center;
-}
 
-.cart-status__text {
-  margin-top: 24px;
-  margin-bottom: 24px;
+  p {
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
 }
 
 .cart-status__title {
@@ -36,7 +40,7 @@ export default {
 }
 
 .cart-status__button {
-  width: 100%;
+  display: block;
   padding: 15px 32px;
 }
 </style>

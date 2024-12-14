@@ -1,61 +1,59 @@
 <template>
-  <BaseSheet class="address-form" :class="{ 'address-form--opened': edited }">
+  <BlockSheet class="address-form" :class="{ 'address-form--opened': edited }">
     <div class="address-form__header">
-      <b class="address-form__title">
-        {{ currentAddress.id ? `Адрес № ${currentAddress.id}` : "Новый адрес"
+      <b>
+        Адрес №{{ index
         }}{{ edited || !currentAddress.name ? "" : `. ${currentAddress.name}` }}
       </b>
 
       <div v-if="!edited" class="address-form__edit">
-        <BaseEditButton @click="edited = true"> Изменить адрес </BaseEditButton>
+        <BlockEditButton @click="edited = true">
+          Изменить адрес
+        </BlockEditButton>
       </div>
     </div>
 
     <template v-if="edited">
       <div class="address-form__wrapper">
         <div class="address-form__input">
-          <BaseInput
+          <BlockInput
             label="Название адреса*"
-            name="name"
+            name="addr-name"
             placeholder="Введите название адреса"
             required
             v-model="currentAddress.name"
           />
         </div>
-
         <div class="address-form__input address-form__input--size--normal">
-          <BaseInput
+          <BlockInput
             label="Улица*"
-            name="street"
+            name="addr-street"
             placeholder="Введите название улицы"
             required
             v-model="currentAddress.street"
           />
         </div>
-
         <div class="address-form__input address-form__input--size--small">
-          <BaseInput
+          <BlockInput
             label="Дом*"
-            name="building"
+            name="addr-house"
             placeholder="Введите номер дома"
             required
-            v-model="currentAddress.building"
+            v-model="currentAddress.house"
           />
         </div>
-
         <div class="address-form__input address-form__input--size--small">
-          <BaseInput
+          <BlockInput
             label="Квартира"
-            name="flat"
+            name="addr-apartment"
             placeholder="Введите № квартиры"
-            v-model="currentAddress.flat"
+            v-model="currentAddress.apartment"
           />
         </div>
-
         <div class="address-form__input">
-          <BaseInput
+          <BlockInput
             label="Комментарий"
-            name="comment"
+            name="addr-comment"
             placeholder="Введите комментарий"
             v-model="currentAddress.comment"
           />
@@ -63,40 +61,19 @@
       </div>
 
       <div class="address-form__buttons">
-        <BaseButton
-          class="address-form__button"
-          data-test="delete-address"
-          transparent
-          @click="$emit('delete')"
-        >
+        <BlockButton transparent @click="$emit('delete')">
           Удалить
-        </BaseButton>
-
-        <BaseButton
-          class="address-form__button"
-          data-test="save-address"
-          :disabled="disabled"
-          @click="changeHandler"
-        >
+        </BlockButton>
+        <BlockButton :disabled="disabled" @click="changeHandler">
           Сохранить
-        </BaseButton>
+        </BlockButton>
       </div>
     </template>
-
     <template v-else>
-      <p class="address-form__text" data-test="address-output">
-        {{ formattedAddress }}
-      </p>
-
-      <p
-        class="address-form__text"
-        data-test="comment-output"
-        v-if="currentAddress.comment"
-      >
-        {{ currentAddress.comment }}
-      </p>
+      <p>{{ formattedAddress }}</p>
+      <span v-if="currentAddress.comment">{{ currentAddress.comment }}</span>
     </template>
-  </BaseSheet>
+  </BlockSheet>
 </template>
 
 <script>
@@ -104,45 +81,43 @@ import { formatAddress } from "@/modules/profile/helpers";
 
 export default {
   name: "ProfileAddressForm",
-
   props: {
     address: {
       type: Object,
       required: true,
     },
+    index: {
+      type: Number,
+      default: 1,
+    },
   },
-
   data() {
     return {
-      edited: !this.address.id,
+      edited: this.address.template,
     };
   },
-
   computed: {
     currentAddress() {
       return this.address;
     },
-
     formattedAddress() {
       return formatAddress(this.currentAddress);
     },
-
     disabled() {
-      const { name, street, building } = this.currentAddress;
-      return !name || !street || !building;
+      const { name, street, house } = this.currentAddress;
+      return !name || !street || !house;
     },
   },
-
   methods: {
     changeHandler() {
-      this.$emit("change");
       this.edited = false;
+      this.$emit("change");
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .address-form {
   $bl: &;
 
@@ -157,17 +132,21 @@ export default {
       padding-bottom: 18px;
     }
   }
-}
 
-.address-form__text {
-  @include r-s16-h19;
+  p {
+    @include r-s16-h19;
 
-  margin-top: 0;
-  margin-bottom: 16px;
-  padding: 0 16px;
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding: 0 16px;
+  }
 
-  &:last-child {
-    margin-bottom: 0;
+  small {
+    @include l-s11-h13;
+
+    display: block;
+
+    padding: 0 16px;
   }
 }
 
@@ -200,11 +179,11 @@ export default {
   justify-content: flex-end;
 
   padding: 0 16px;
-}
 
-.address-form__button {
-  margin-left: 16px;
-  padding: 16px 27px;
+  button {
+    margin-left: 16px;
+    padding: 16px 27px;
+  }
 }
 
 .address-form__header {
