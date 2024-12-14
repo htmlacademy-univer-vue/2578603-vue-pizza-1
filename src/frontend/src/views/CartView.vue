@@ -1,0 +1,175 @@
+<template>
+  <div>
+    <form
+      v-if="currentOrder.pizzas.length"
+      class="cart"
+      action="test.html"
+      method="post"
+      @submit.prevent="handleOrder"
+    >
+      <BlockContent class="cart__content" title="Корзина">
+        <BlockSheet>
+          <CartList
+            :content="content"
+            :pizzas="currentOrder.pizzas"
+            @changePizzas="updateOrder({ pizzas: $event })"
+          />
+        </BlockSheet>
+
+        <div class="cart__additional">
+          <CartMiscList
+            :misc="content.misc"
+            :value="currentOrder.misc"
+            @input="updateOrder({ misc: $event })"
+          />
+        </div>
+
+        <div class="cart__form">
+          <CartForm
+            :addresses="addresses"
+            :address="currentOrder.address"
+            :phone="currentOrder.phone"
+            @changePhone="updateOrder({ phone: $event })"
+            @changeAddress="updateOrder({ address: $event })"
+            @updateAddress="updateAddress"
+            @order="handleOrder"
+          />
+        </div>
+      </BlockContent>
+
+      <CartFooter
+        :content="content"
+        :currentOrder="currentOrder"
+        :isValid="isValid"
+        :isSending="isSending"
+      />
+    </form>
+    <BlockContent v-else class="cart__content" title="Корзина">
+      <BlockSheet class="cart__empty">
+        <p>В корзине нет ни одного товара</p>
+      </BlockSheet>
+    </BlockContent>
+
+    <BlockPopup v-if="isSended" :to="popupLink">
+      <CartStatus :to="popupLink" />
+    </BlockPopup>
+  </div>
+</template>
+
+<script>
+import { mapState, mapMutations } from "vuex";
+import { ADD_ORDER, UPDATE_ORDER } from "@/store/mutation-types";
+import { createOrder } from "@/common/helpers";
+import CartList from "@/modules/cart/components/CartList.vue";
+import CartMiscList from "@/modules/cart/components/CartMiscList.vue";
+import CartForm from "@/modules/cart/components/CartForm.vue";
+import CartFooter from "@/modules/cart/components/CartFooter.vue";
+import CartStatus from "@/modules/cart/components/CartStatus.vue";
+
+export default {
+  name: "CartView",
+  components: {
+    CartList,
+    CartMiscList,
+    CartForm,
+    CartFooter,
+    CartStatus,
+  },
+  props: {
+    content: {
+      type: Object,
+      required: true,
+    },
+    user: {
+      type: Object,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      isSending: false,
+      isSended: false,
+    };
+  },
+  computed: {
+    ...mapState("User", ["addresses"]),
+    ...mapState("Cart", ["currentOrder"]),
+    popupLink() {
+      return this.user ? "/orders" : "/";
+    },
+    isValid() {
+      return Boolean(
+        this.currentOrder.phone &&
+          (!this.currentOrder.address ||
+            (this.currentOrder.address.street &&
+              this.currentOrder.address.building))
+      );
+    },
+  },
+  methods: {
+    ...mapMutations("Cart", {
+      updateOrder: UPDATE_ORDER,
+    }),
+    ...mapMutations("Orders", {
+      addOrder: ADD_ORDER,
+    }),
+    updateAddress(override) {
+      this.$emit("updateOrder", {
+        address: {
+          ...this.currentOrder.address,
+          ...override,
+        },
+      });
+    },
+    async handleOrder() {
+      this.isSending = true;
+
+      const data = await this.$store.dispatch(
+        "Orders/addOrder",
+        this.currentOrder
+      );
+      this.isSending = false;
+
+      if (data) {
+        this.addOrder(this.currentOrder);
+        this.isSended = true;
+        this.updateOrder({
+          ...createOrder(),
+          misc: this.content.misc.map(({ id }) => ({
+            miscId: id,
+            quantity: 0,
+          })),
+        });
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+.cart {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(
+    100vh - 61px
+  ); // Учитываем высоту хедера, чтобы прибить футер к низу
+}
+
+.cart__content {
+  flex-grow: 1;
+  width: 770px;
+}
+
+.cart__title {
+  margin-bottom: 15px;
+}
+
+.cart__additional {
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
+.cart__empty {
+  padding: 20px 30px;
+}
+</style>
