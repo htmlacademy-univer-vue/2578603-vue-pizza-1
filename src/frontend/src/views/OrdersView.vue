@@ -1,8 +1,8 @@
 <template>
   <div class="orders">
-    <BaseHeading class="orders__title">
+    <BlockHeading class="orders__title">
       {{ $route.meta.title }}
-    </BaseHeading>
+    </BlockHeading>
 
     <template v-if="orders.length">
       <OrderCard
@@ -10,60 +10,47 @@
         :key="`order-${i}`"
         class="orders__card"
         :content="content"
-        :current-order="order"
+        :currentOrder="order"
         @deleteOrder="deleteOrder"
-        @repeatOrder="repeatOrder"
+        @updateOrder="updateOrder"
       />
     </template>
-
-    <p v-else class="orders__empty">У вас нет ни одного заказа</p>
+    <p v-else>У вас нет ни одного заказа</p>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import { UPDATE_ORDER } from "@/store/mutation-types";
 import OrderCard from "@/modules/orders/components/OrderCard.vue";
 
 export default {
   name: "OrdersView",
-
-  meta: {
-    layout: "AppLayoutWithSidebar",
-    title: "История заказов",
-  },
-
   components: {
     OrderCard,
   },
-
   props: {
     content: {
       type: Object,
       required: true,
     },
   },
-
   computed: {
     ...mapState("Orders", ["orders"]),
   },
-
   beforeCreate() {
     this.$store.dispatch("Orders/getOrders");
   },
-
   methods: {
+    ...mapMutations("Cart", {
+      updateOrder: UPDATE_ORDER,
+    }),
     ...mapActions("Orders", ["deleteOrder"]),
-
-    repeatOrder(additions) {
-      this.$store.commit(`Cart/${UPDATE_ORDER}`, additions);
-      this.$router.push("/cart");
-    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .orders__card {
   margin-bottom: 32px;
 }

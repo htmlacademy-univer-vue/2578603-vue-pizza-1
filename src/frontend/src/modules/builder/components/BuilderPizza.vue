@@ -6,10 +6,9 @@
   >
     <BuilderPizzaFilling
       v-for="{ quantity, ingredientId } in ingredients"
-      :key="`filling-${ingredientId}`"
+      :key="ingredientId"
       :id="ingredientId"
       :quantity="quantity"
-      :data-test="`filling-${ingredientId}`"
     />
   </AppDrop>
 </template>
@@ -20,33 +19,27 @@ import BuilderPizzaFilling from "@/modules/builder/components/BuilderPizzaFillin
 
 export default {
   name: "BuilderPizza",
-
   components: {
     BuilderPizzaFilling,
   },
-
   props: {
     doughId: {
       type: Number,
       required: true,
     },
-
     sauceId: {
       type: Number,
       required: true,
     },
-
     sizeId: {
       type: Number,
       required: true,
     },
-
     ingredients: {
       type: Array,
       required: true,
     },
   },
-
   methods: {
     onDrop({ ingredientId }) {
       const ingredients = this.ingredients.slice();
@@ -65,7 +58,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .pizza {
   position: relative;
   background-size: 100%;

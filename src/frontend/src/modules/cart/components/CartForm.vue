@@ -3,19 +3,19 @@
     <label class="cart-form__select">
       <span class="cart-form__label">Получение заказа:</span>
 
-      <BaseSelect
-        class="cart-form__select-control"
+      <BlockSelect
         name="mode"
         v-model="currentMode"
         :options="modes"
         @input="changeAddressByMode"
-      />
-    </label>
+      >
+      </BlockSelect
+    ></label>
 
-    <BaseInput
+    <BlockInput
       name="phone"
       label="Контактный телефон:"
-      big-label
+      bigLabel
       placeholder="+7 999-999-99-99"
       v-model="currentPhone"
     />
@@ -26,35 +26,36 @@
       </span>
 
       <div class="cart-form__input">
-        <BaseInput
+        <BlockInput
           name="street"
           label="Улица*"
           :readonly="currentMode !== 'new'"
           required
           v-model="address.street"
           @input="$emit('updateAddress', { street: $event })"
-        />
+        >
+        </BlockInput>
       </div>
-
       <div class="cart-form__input cart-form__input--small">
-        <BaseInput
+        <BlockInput
           name="building"
           label="Дом*"
           :readonly="currentMode !== 'new'"
           required
           v-model="address.building"
           @input="$emit('updateAddress', { building: $event })"
-        />
+        >
+        </BlockInput>
       </div>
-
       <div class="cart-form__input cart-form__input--small">
-        <BaseInput
+        <BlockInput
           name="flat"
           label="Квартира"
           :readonly="currentMode !== 'new'"
           v-model="address.flat"
           @input="$emit('updateAddress', { flat: $event })"
-        />
+        >
+        </BlockInput>
       </div>
     </div>
   </div>
@@ -63,41 +64,37 @@
 <script>
 export default {
   name: "CartForm",
-
   props: {
     addresses: {
       type: Array,
       required: true,
     },
-
     address: {
       type: Object,
       default: null,
     },
-
     phone: {
       type: String,
       default: "",
     },
+    mode: {
+      type: String,
+    },
   },
-
   data() {
     return {
       currentMode: this.chooseMode(),
     };
   },
-
   computed: {
     currentPhone: {
       get() {
         return this.phone;
       },
-
       set(phone) {
         this.$emit("changePhone", phone);
       },
     },
-
     modes() {
       return [
         {
@@ -115,16 +112,13 @@ export default {
       ];
     },
   },
-
   methods: {
     chooseMode() {
       if (this.address) {
         return `${this.address.id || "new"}`;
       }
-
       return "self";
     },
-
     changeAddressByMode() {
       switch (this.currentMode) {
         case "self":
@@ -148,7 +142,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-form {
   display: flex;
   align-items: center;
@@ -160,13 +154,13 @@ export default {
   align-items: center;
   margin-right: auto;
 
-  .cart-form__label {
+  span {
     margin-right: 16px;
   }
-}
 
-.cart-form__select-control {
-  max-width: 172px;
+  select {
+    max-width: 172px;
+  }
 }
 
 .cart-form__label {

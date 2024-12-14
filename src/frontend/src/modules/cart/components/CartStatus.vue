@@ -1,16 +1,14 @@
 <template>
   <div class="cart-status">
-    <BaseSubheading class="cart-status__title">
+    <BlockSubheading class="cart-status__title">
       Спасибо за заказ
-    </BaseSubheading>
+    </BlockSubheading>
 
-    <p class="cart-status__text">
-      Мы начали готовить Ваш заказ, скоро привезём его вам &semi;&rpar;
-    </p>
+    <p>Мы начали готовить Ваш заказ, скоро привезём его вам &semi;&rpar;</p>
 
-    <BaseButton class="cart-status__button" @click="$emit('close')">
+    <BlockButton class="cart-status__button" @click="$emit('close')">
       Отлично, я жду!
-    </BaseButton>
+    </BlockButton>
   </div>
 </template>
 
@@ -20,14 +18,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-status {
   text-align: center;
-}
 
-.cart-status__text {
-  margin-top: 24px;
-  margin-bottom: 24px;
+  p {
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
 }
 
 .cart-status__title {

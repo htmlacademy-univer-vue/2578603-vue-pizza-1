@@ -6,7 +6,7 @@
     leave-active-class="pizza-filling--leave-active"
     leave-to-class="pizza-filling--leave-to"
   >
-    <span
+    <div
       v-for="i in quantity"
       :key="i"
       class="pizza-filling"
@@ -22,13 +22,11 @@
 <script>
 export default {
   name: "BuilderPizzaFilling",
-
   props: {
     id: {
       type: Number,
       required: true,
     },
-
     quantity: {
       type: Number,
       required: true,
@@ -37,7 +35,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .pizza-filling {
   position: absolute;
   top: 0;

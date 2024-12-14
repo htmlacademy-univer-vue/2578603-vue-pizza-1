@@ -48,7 +48,7 @@ export const createResources = (notifier) => ({
 
 export const setAuth = (store) => {
   store.$api.auth.setAuthHeader();
-  store.dispatch("Profile/getMe");
+  store.dispatch("User/getMe");
 };
 
 export const getFileName = (url) => url.replace(/^.*\/(.*?)\..*$/, "$1");
@@ -93,6 +93,3 @@ export const adaptContentEntity = (contentEntity) => {
   }
   return newContentEntity;
 };
-
-export const accumulateSrc = (srcset, firstIndex = 1) =>
-  srcset.map((filename, i) => `${filename} ${i + firstIndex}x`).join(", ");

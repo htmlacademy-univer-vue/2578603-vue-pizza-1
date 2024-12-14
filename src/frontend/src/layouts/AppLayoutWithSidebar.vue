@@ -1,6 +1,10 @@
 <template>
   <div>
-    <AppLayoutHeader :content="content" :user="user" />
+    <AppLayoutHeader
+      :content="content"
+      :user="user"
+      @logout="$emit('logout')"
+    />
 
     <main class="layout">
       <template v-if="content && user">
@@ -17,10 +21,9 @@
           </Transition>
         </div>
       </template>
-
       <div v-else class="layout__content">
-        <p v-if="!user" key="fallback-deny">Доступ запрещён!</p>
-        <p v-else key="fallback-error">Ошибка загрузки данных</p>
+        <p v-if="!user">Доступ запрещён!</p>
+        <p v-else>Ошибка загрузки данных</p>
       </div>
     </main>
   </div>
@@ -32,18 +35,15 @@ import AppSidebar from "@/layouts/AppSidebar.vue";
 
 export default {
   name: "AppLayoutWithSidebar",
-
   components: {
     AppLayoutHeader,
     AppSidebar,
   },
-
   props: {
     content: {
       type: Object,
       default: null,
     },
-
     user: {
       type: Object,
       default: null,
@@ -52,7 +52,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .layout__sidebar {
   position: fixed;
   z-index: 2;

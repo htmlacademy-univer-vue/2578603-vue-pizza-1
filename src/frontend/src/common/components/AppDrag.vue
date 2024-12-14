@@ -4,7 +4,6 @@
     @dragstart.self="onDrag"
     @dragover.prevent
     @dragenter.prevent
-    data-test="AppDrag"
   >
     <slot />
   </div>
@@ -15,19 +14,16 @@ import { DATA_TRANSFER_PAYLOAD, MOVE } from "@/common/constants";
 
 export default {
   name: "AppDrag",
-
   props: {
     transferData: {
       type: Object,
       required: true,
     },
-
     draggable: {
       type: Boolean,
       default: true,
     },
   },
-
   methods: {
     onDrag({ dataTransfer }) {
       dataTransfer.effectAllowed = MOVE;

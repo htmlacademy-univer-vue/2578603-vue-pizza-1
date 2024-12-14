@@ -1,21 +1,20 @@
 <template>
-  <div class="cart">
+  <div>
     <form
       v-if="currentOrder.pizzas.length"
-      class="cart__order"
+      class="cart"
       action="test.html"
       method="post"
       @submit.prevent="handleOrder"
     >
-      <BaseContent class="cart__content" title="Корзина">
-        <BaseSheet>
+      <BlockContent class="cart__content" title="Корзина">
+        <BlockSheet>
           <CartList
-            class="cart__list"
             :content="content"
             :pizzas="currentOrder.pizzas"
             @changePizzas="updateOrder({ pizzas: $event })"
           />
-        </BaseSheet>
+        </BlockSheet>
 
         <div class="cart__additional">
           <CartMiscList
@@ -36,27 +35,25 @@
             @order="handleOrder"
           />
         </div>
-      </BaseContent>
+      </BlockContent>
 
       <CartFooter
-        class="cart__footer"
         :content="content"
-        :current-order="currentOrder"
-        :is-valid="isValid"
-        :is-sending="isSending"
+        :currentOrder="currentOrder"
+        :isValid="isValid"
+        :isSending="isSending"
       />
     </form>
-
-    <BaseContent v-else class="cart__content" title="Корзина">
-      <BaseSheet class="cart__empty">
-        <p>{{ emptyMessage }}</p>
-      </BaseSheet>
-    </BaseContent>
+    <BlockContent v-else class="cart__content" title="Корзина">
+      <BlockSheet class="cart__empty">
+        <p>В корзине нет ни одного товара</p>
+      </BlockSheet>
+    </BlockContent>
 
     <Transition name="fade" @after-leave="leaveCart">
-      <BasePopup class="cart__popup" v-if="isSended" @close="isSended = false">
+      <BlockPopup v-if="isSended" @close="isSended = false">
         <CartStatus @close="isSended = false" />
-      </BasePopup>
+      </BlockPopup>
     </Transition>
   </div>
 </template>
@@ -65,7 +62,6 @@
 import { mapState, mapMutations } from "vuex";
 import { ADD_ORDER, UPDATE_ORDER } from "@/store/mutation-types";
 import { createOrder } from "@/common/helpers";
-import { Message } from "@/common/constants";
 import CartList from "@/modules/cart/components/CartList.vue";
 import CartMiscList from "@/modules/cart/components/CartMiscList.vue";
 import CartForm from "@/modules/cart/components/CartForm.vue";
@@ -74,7 +70,6 @@ import CartStatus from "@/modules/cart/components/CartStatus.vue";
 
 export default {
   name: "CartView",
-
   components: {
     CartList,
     CartMiscList,
@@ -82,32 +77,25 @@ export default {
     CartFooter,
     CartStatus,
   },
-
   props: {
     content: {
       type: Object,
       required: true,
     },
-
     user: {
       type: Object,
       default: null,
     },
   },
-
   data() {
     return {
       isSending: false,
       isSended: false,
-      emptyMessage: Message.EMPTY_CART,
     };
   },
-
   computed: {
-    ...mapState("Profile", ["addresses"]),
-
+    ...mapState("User", ["addresses"]),
     ...mapState("Cart", ["currentOrder"]),
-
     isValid() {
       return Boolean(
         this.currentOrder.phone &&
@@ -117,16 +105,13 @@ export default {
       );
     },
   },
-
   methods: {
     ...mapMutations("Cart", {
       updateOrder: UPDATE_ORDER,
     }),
-
     ...mapMutations("Orders", {
       addOrder: ADD_ORDER,
     }),
-
     updateAddress(override) {
       this.$emit("updateOrder", {
         address: {
@@ -135,11 +120,9 @@ export default {
         },
       });
     },
-
     leaveCart() {
       this.$router.push(this.user ? "/orders" : "/");
     },
-
     async handleOrder() {
       this.isSending = true;
 
@@ -165,13 +148,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.cart__order {
+<style lang="scss">
+.cart {
   display: flex;
   flex-direction: column;
-
-  // Учитываем высоту хедера, чтобы прибить футер к низу
-  min-height: calc(100vh - 61px);
+  min-height: calc(
+    100vh - 61px
+  ); // Учитываем высоту хедера, чтобы прибить футер к низу
 }
 
 .cart__content {

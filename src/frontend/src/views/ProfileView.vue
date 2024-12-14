@@ -1,8 +1,8 @@
 <template>
   <div class="profile">
-    <BaseHeading class="profile__title">
+    <BlockHeading class="profile__title">
       {{ $route.meta.title }}
-    </BaseHeading>
+    </BlockHeading>
 
     <ProfileUser class="profile__user" :user="user" />
 
@@ -17,21 +17,17 @@
 
     <ProfileAddressForm
       v-if="newAddress"
-      class="profile__address profile__address--new"
+      class="profile__address"
       :address="newAddress"
       @change="addAddress"
       @delete="newAddress = null"
     />
 
-    <BaseButton
-      v-if="!newAddress"
-      class="profile__button"
-      data-test="new-address"
-      bordered
-      @click="newAddress = createAddress(user.id)"
-    >
-      Добавить новый адрес
-    </BaseButton>
+    <div v-if="!newAddress" class="profile__button">
+      <BlockButton bordered @click="newAddress = createAddress(user.id)">
+        Добавить новый адрес
+      </BlockButton>
+    </div>
   </div>
 </template>
 
@@ -43,40 +39,29 @@ import ProfileAddressForm from "@/modules/profile/components/ProfileAddressForm.
 
 export default {
   name: "ProfileView",
-
-  meta: {
-    layout: "AppLayoutWithSidebar",
-    title: "Мои данные",
-  },
-
   components: {
     ProfileUser,
     ProfileAddressForm,
   },
-
   props: {
     user: {
       type: Object,
       default: null,
     },
   },
-
   data() {
     return {
       newAddress: null,
     };
   },
-
   computed: {
-    ...mapState("Profile", ["addresses"]),
+    ...mapState("User", ["addresses"]),
   },
-
   methods: {
-    ...mapActions("Profile", ["updateAddress", "deleteAddress"]),
-
+    ...mapActions("User", ["updateAddress", "deleteAddress"]),
     async addAddress() {
       const { id = null } = await this.$store.dispatch(
-        "Profile/addAddress",
+        "User/addAddress",
         this.newAddress
       );
 
@@ -84,13 +69,12 @@ export default {
         this.newAddress = null;
       }
     },
-
     createAddress,
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .profile__title {
   margin: 0 0 27px;
 }
@@ -105,6 +89,9 @@ export default {
 
 .profile__button {
   margin: 40px 0;
-  padding: 12px 23px;
+
+  button {
+    padding: 12px 23px;
+  }
 }
 </style>
