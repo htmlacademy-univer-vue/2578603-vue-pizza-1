@@ -1,21 +1,29 @@
 <template>
   <div id="app">
     <AppLayout />
+<<<<<<< Updated upstream
 
     <AppNotifications />
+=======
+>>>>>>> Stashed changes
   </div>
 </template>
 
 <script>
+<<<<<<< Updated upstream
 import { setAuth } from "@/common/helpers";
 import AppLayout from "@/layouts/AppLayout.vue";
 import AppNotifications from "@/modules/notifications/components/AppNotifications";
+=======
+import AppLayout from "@/layouts/AppLayout.vue";
+>>>>>>> Stashed changes
 
 export default {
   name: "App",
 
   components: {
     AppLayout,
+<<<<<<< Updated upstream
     AppNotifications,
   },
 
@@ -29,6 +37,8 @@ export default {
     }
 
     this.$store.dispatch("init");
+=======
+>>>>>>> Stashed changes
   },
 };
 </script>

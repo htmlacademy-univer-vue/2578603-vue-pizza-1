@@ -1,4 +1,5 @@
 <template>
+<<<<<<< Updated upstream
   <TransitionGroup
     name="pizza-filling"
     enter-class="pizza-filling--enter"
@@ -7,21 +8,34 @@
     leave-to-class="pizza-filling--leave-to"
   >
     <span
+=======
+  <div>
+    <div
+>>>>>>> Stashed changes
       v-for="i in quantity"
       :key="i"
       class="pizza-filling"
       :class="{
+<<<<<<< Updated upstream
         [`pizza-filling--ingredient--${id}`]: true,
+=======
+        [`pizza-filling--${alias}`]: true,
+>>>>>>> Stashed changes
         'pizza-filling--second': i === 2,
         'pizza-filling--third': i === 3,
       }"
     />
+<<<<<<< Updated upstream
   </TransitionGroup>
+=======
+  </div>
+>>>>>>> Stashed changes
 </template>
 
 <script>
 export default {
   name: "BuilderPizzaFilling",
+<<<<<<< Updated upstream
 
   props: {
     id: {
@@ -38,6 +52,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+=======
+  props: {
+    alias: {
+      type: String,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+>>>>>>> Stashed changes
 .pizza-filling {
   position: absolute;
   top: 0;
