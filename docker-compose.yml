@@ -12,10 +12,10 @@ services:
       - 5432:5432
 
   backend:
-    build: backend
+    build: src/backend
     command: npm start
     volumes:
-      - ./backend:/backend
+      - ./src/backend:/backend
       - /backend/node_modules
     depends_on:
       - db
@@ -23,15 +23,13 @@ services:
       - 3000:3000
 
   frontend:
-    build:
-      context: ./frontend
-#    https://github: com/vitejs/vite/issues/2671#issuecomment-829535806:
-    command: sh -c "npm rebuild esbuild && npm run dev"
+    build: src/frontend
+    command: npm run serve
     environment:
       PORT: '8080'
       HOST: '0.0.0.0'
     ports:
       - '8080:8080'
     volumes:
-      - ./frontend:/frontend
+      - ./src/frontend:/frontend
       - /frontend/node_modules
