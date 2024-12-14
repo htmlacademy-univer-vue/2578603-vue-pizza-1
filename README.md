@@ -1,15 +1,4 @@
-<<<<<<< Updated upstream
-=======
-# Личный проект «VuePizza»
-
-* Студент: [Андрей Ефимов](https://up.htmlacademy.ru/vue/1/user/367335).
-
----
-
-_Не удаляйте и не изменяйте папки и файлы:_
-_`.editorconfig`, `.gitattributes`, `.gitignore`._
-
----
+Task 1
 
 ### Памятка
 
