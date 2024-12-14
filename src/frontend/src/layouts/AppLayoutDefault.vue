@@ -1,37 +1,50 @@
 <template>
   <div>
-    <AppLayoutHeader :content="content" :user="user" />
+    <AppLayoutHeader
+      :content="content"
+      :currentOrder="currentOrder"
+      :user="user"
+      @logout="$emit('logout')"
+    />
 
-    <Transition
-      name="slide"
-      :appear="$route.path !== '/login'"
-      appear-class="slide-appear"
-      appear-active-class="slide-appear-active"
-    >
-      <RouterView v-if="content" :content="content" :user="user" />
-    </Transition>
+    <RouterView
+      :content="content"
+      :orders="orders"
+      :currentOrder="currentOrder"
+      :user="user"
+      @createPizza="$emit('createPizza', $event)"
+      @updatePizza="$emit('updatePizza', $event)"
+      @changeOrder="$emit('changeOrder', $event)"
+      @changeAdditions="$emit('changeAdditions', $event)"
+      @changeDelivery="$emit('changeDelivery', $event)"
+      @order="$emit('order')"
+      @login="$emit('login')"
+    />
   </div>
 </template>
 
 <script>
+import { contentPropMixin } from "@/common/mixins";
 import AppLayoutHeader from "@/layouts/AppLayoutHeader.vue";
 
 export default {
   name: "AppLayoutDefault",
-
+  mixins: [contentPropMixin],
   components: {
     AppLayoutHeader,
   },
-
   props: {
-    content: {
+    currentOrder: {
       type: Object,
-      default: null,
+      required: true,
     },
-
+    orders: {
+      type: Array,
+      required: true,
+    },
     user: {
       type: Object,
-      default: null,
+      required: true,
     },
   },
 };

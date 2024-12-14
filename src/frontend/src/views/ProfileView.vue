@@ -1,100 +1,67 @@
 <template>
   <div class="profile">
-    <BaseHeading class="profile__title">
-      {{ $route.meta.title }}
-    </BaseHeading>
-
     <ProfileUser class="profile__user" :user="user" />
 
     <ProfileAddressForm
-      v-for="address of addresses"
-      :key="`address-${address.id}`"
+      v-for="(address, i) of addresses"
+      :key="`address-${i}`"
       class="profile__address"
       :address="address"
-      @change="updateAddress(address)"
-      @delete="deleteAddress(address.id)"
+      :index="i + 1"
+      @change="changeHandler(address, i)"
+      @delete="addresses.splice(i, 1)"
     />
 
-    <ProfileAddressForm
-      v-if="newAddress"
-      class="profile__address profile__address--new"
-      :address="newAddress"
-      @change="addAddress"
-      @delete="newAddress = null"
-    />
-
-    <BaseButton
-      v-if="!newAddress"
-      class="profile__button"
-      data-test="new-address"
-      bordered
-      @click="newAddress = createAddress(user.id)"
-    >
-      Добавить новый адрес
-    </BaseButton>
+    <div class="profile__button">
+      <BlockButton bordered @click="addNewAddress">
+        Добавить новый адрес
+      </BlockButton>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { createAddress } from "@/common/helpers";
 import ProfileUser from "@/modules/profile/components/ProfileUser.vue";
 import ProfileAddressForm from "@/modules/profile/components/ProfileAddressForm.vue";
 
 export default {
-  name: "ProfileView",
-
-  meta: {
-    layout: "AppLayoutWithSidebar",
-    title: "Мои данные",
-  },
-
+  name: "OrdersView",
   components: {
     ProfileUser,
     ProfileAddressForm,
   },
-
   props: {
     user: {
       type: Object,
-      default: null,
+      required: true,
     },
   },
-
   data() {
     return {
-      newAddress: null,
+      addresses: [],
     };
   },
-
-  computed: {
-    ...mapState("Profile", ["addresses"]),
-  },
-
   methods: {
-    ...mapActions("Profile", ["updateAddress", "deleteAddress"]),
+    changeHandler(address, index) {
+      delete address.template;
 
-    async addAddress() {
-      const { id = null } = await this.$store.dispatch(
-        "Profile/addAddress",
-        this.newAddress
-      );
-
-      if (id) {
-        this.newAddress = null;
-      }
+      this.addresses[index] = address;
     },
-
-    createAddress,
+    addNewAddress() {
+      this.addresses.push({
+        name: "",
+        street: "",
+        house: "",
+        apartment: "",
+        comment: "",
+        template: true,
+      });
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.profile__title {
-  margin: 0 0 27px;
-}
-
+<style lang="scss">
 .profile__user {
   margin-bottom: 33px;
 }
@@ -105,6 +72,9 @@ export default {
 
 .profile__button {
   margin: 40px 0;
-  padding: 12px 23px;
+
+  button {
+    padding: 12px 23px;
+  }
 }
 </style>

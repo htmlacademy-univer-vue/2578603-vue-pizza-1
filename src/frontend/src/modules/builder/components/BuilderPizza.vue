@@ -1,15 +1,14 @@
 <template>
   <AppDrop
     class="pizza"
-    :class="`pizza--foundation--${doughId}-${sauceId} pizza--size--${sizeId}`"
+    :class="`pizza--foundation--${dough}-${sauce} pizza--size--${size}`"
     @drop="onDrop"
   >
     <BuilderPizzaFilling
-      v-for="{ quantity, ingredientId } in ingredients"
-      :key="`filling-${ingredientId}`"
-      :id="ingredientId"
+      v-for="(quantity, alias) in ingredients"
+      :key="alias"
+      :alias="alias"
       :quantity="quantity"
-      :data-test="`filling-${ingredientId}`"
     />
   </AppDrop>
 </template>
@@ -20,77 +19,68 @@ import BuilderPizzaFilling from "@/modules/builder/components/BuilderPizzaFillin
 
 export default {
   name: "BuilderPizza",
-
   components: {
     BuilderPizzaFilling,
   },
-
   props: {
-    doughId: {
-      type: Number,
+    dough: {
+      type: String,
       required: true,
     },
-
-    sauceId: {
-      type: Number,
+    sauce: {
+      type: String,
       required: true,
     },
-
-    sizeId: {
-      type: Number,
+    size: {
+      type: String,
       required: true,
     },
-
     ingredients: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },
-
   methods: {
-    onDrop({ ingredientId }) {
-      const ingredients = this.ingredients.slice();
-      const targetIngredient = this.ingredients.find(
-        (item) => item.ingredientId === ingredientId
-      );
+    onDrop({ ingredient }) {
+      const ingredients = { ...this.ingredients };
 
-      if (targetIngredient.quantity >= MAX_INGREDIENT_QUANTITY) {
+      if (ingredients[ingredient] >= MAX_INGREDIENT_QUANTITY) {
         return;
       }
 
-      targetIngredient.quantity++;
+      ingredients[ingredient]++;
       this.$emit("change", ingredients);
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .pizza {
   position: relative;
   background-size: 100%;
 
-  &--foundation--1-1 {
-    background-image: url("~@/assets/img/foundation/small-creamy.svg");
-  }
-
-  &--foundation--1-2 {
-    background-image: url("~@/assets/img/foundation/small-tomato.svg");
-  }
-
-  &--foundation--2-1 {
+  &--foundation--large-creamy {
     background-image: url("~@/assets/img/foundation/big-creamy.svg");
   }
 
-  &--foundation--2-2 {
+  &--foundation--large-tomato {
     background-image: url("~@/assets/img/foundation/big-tomato.svg");
   }
 
-  &--size--1 {
+  &--foundation--light-creamy {
+    background-image: url("~@/assets/img/foundation/small-creamy.svg");
+  }
+
+  &--foundation--light-tomato {
+    background-image: url("~@/assets/img/foundation/small-tomato.svg");
+  }
+
+  &--size--small {
     transform: scale(0.9);
   }
 
-  &--size--3 {
+  &--size--big {
     transform: scale(1.1);
   }
 }

@@ -1,58 +1,63 @@
 <template>
   <div>
-    <AppLayoutHeader :content="content" :user="user" />
+    <AppLayoutHeader
+      :content="content"
+      :currentOrder="currentOrder"
+      :user="user"
+      @logout="$emit('logout')"
+    />
 
     <main class="layout">
-      <template v-if="content && user">
-        <AppSidebar class="layout__sidebar" />
+      <AppSidebar class="layout__sidebar" />
 
-        <div class="layout__content">
-          <Transition
-            name="slide"
-            appear
-            appear-class="slide-appear"
-            appear-active-class="slide-appear-active"
-          >
-            <RouterView :content="content" :user="user" />
-          </Transition>
-        </div>
-      </template>
+      <div class="layout__content">
+        <BlockHeading class="layout__title">
+          {{ $route.meta.title }}
+        </BlockHeading>
 
-      <div v-else class="layout__content">
-        <p v-if="!user" key="fallback-deny">Доступ запрещён!</p>
-        <p v-else key="fallback-error">Ошибка загрузки данных</p>
+        <RouterView
+          :content="content"
+          :orders="orders"
+          :currentOrder="currentOrder"
+          :user="user"
+          @deleteOrder="$emit('deleteOrder', $event)"
+          @changeOrder="$emit('changeOrder', $event)"
+        />
       </div>
     </main>
   </div>
 </template>
 
 <script>
+import { contentPropMixin } from "@/common/mixins";
 import AppLayoutHeader from "@/layouts/AppLayoutHeader.vue";
 import AppSidebar from "@/layouts/AppSidebar.vue";
 
 export default {
   name: "AppLayoutWithSidebar",
-
+  mixins: [contentPropMixin],
   components: {
     AppLayoutHeader,
     AppSidebar,
   },
-
   props: {
-    content: {
+    currentOrder: {
       type: Object,
-      default: null,
+      required: true,
     },
-
+    orders: {
+      type: Array,
+      required: true,
+    },
     user: {
       type: Object,
-      default: null,
+      required: true,
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .layout__sidebar {
   position: fixed;
   z-index: 2;
@@ -66,5 +71,9 @@ export default {
   padding-top: 22px;
   padding-right: 2.12%;
   padding-left: 200px;
+}
+
+.layout__title {
+  margin: 0 0 27px;
 }
 </style>

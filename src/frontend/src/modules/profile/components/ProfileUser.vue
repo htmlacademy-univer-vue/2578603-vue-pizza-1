@@ -1,21 +1,19 @@
 <template>
   <div class="user">
-    <BasePicture
-      :srcset="[user.srcset.x2, user.srcset.x4]"
-      :webpset="[user.webpset.x2, user.webpset.x4]"
+    <BlockPicture
+      :srcset="['users/user5@2x.jpg', 'users/user5@4x.jpg']"
+      :webpset="['users/user5@2x.webp', 'users/user5@4x.webp']"
       :alt="user.name"
       width="72"
       height="72"
-      remote
     />
 
     <div class="user__name">
-      {{ user.name }}
+      <span>{{ user.name }}</span>
     </div>
 
     <p class="user__phone">
-      Контактный телефон:
-      <span class="user__phone-value">{{ user.phone }}</span>
+      Контактный телефон: <span>{{ user.phone }}</span>
     </p>
   </div>
 </template>
@@ -23,17 +21,16 @@
 <script>
 export default {
   name: "ProfileUser",
-
   props: {
     user: {
       type: Object,
-      default: null,
+      required: true,
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .user {
   display: flex;
   flex-wrap: wrap;
@@ -44,6 +41,12 @@ export default {
   @include b-s20-h23;
 
   margin-left: 30px;
+
+  span {
+    display: inline-block;
+
+    vertical-align: middle;
+  }
 }
 
 .user__phone {
@@ -51,9 +54,9 @@ export default {
 
   width: 100%;
   margin-top: 20px;
-}
 
-.user__phone-value {
-  font-weight: 400;
+  span {
+    font-weight: 400;
+  }
 }
 </style>

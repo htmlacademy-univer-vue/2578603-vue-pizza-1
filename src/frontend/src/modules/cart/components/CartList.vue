@@ -1,11 +1,10 @@
 <template>
   <ul class="cart-list">
-    <CartListItem
+    <CartItem
       class="cart-list__item"
-      v-for="(pizza, i) of pizzas"
-      :key="`pizza-${i}`"
+      v-for="pizza of pizzas"
+      :key="pizza.name"
       :content="content"
-      :index="i"
       :pizza="pizza"
       @input="changePizzas"
     />
@@ -13,43 +12,36 @@
 </template>
 
 <script>
-import CartListItem from "@/modules/cart/components/CartListItem.vue";
+import { contentPropMixin } from "@/common/mixins";
+import CartItem from "@/modules/cart/components/CartItem.vue";
 
 export default {
   name: "CartList",
-
-  components: { CartListItem },
-
+  mixins: [contentPropMixin],
+  components: { CartItem },
   props: {
-    content: {
-      type: Object,
-      required: true,
-    },
-
     pizzas: {
       type: Array,
       required: true,
     },
   },
-
   methods: {
     changePizzas(pizza) {
       const pizzas = this.pizzas.slice();
       const currentIndex = pizzas.findIndex(({ name }) => name === pizza.name);
 
-      if (pizza.quantity < 1) {
+      if (pizza.counter < 1) {
         pizzas.splice(currentIndex, 1);
       } else {
         pizzas[currentIndex] = pizza;
       }
-
       this.$emit("changePizzas", pizzas);
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-list {
   @include clear-list;
 

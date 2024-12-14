@@ -3,4 +3,11 @@
 @import "fonts.scss";
 @import "visually-hidden.scss";
 @import "scaffolding.scss";
-@import "animations.scss";
+
+// layout
+@import "layout/main.scss";
+@import "layout/popup.scss";
+
+// blocks
+@import "blocks/close.scss";
+@import "blocks/tel-form.scss";

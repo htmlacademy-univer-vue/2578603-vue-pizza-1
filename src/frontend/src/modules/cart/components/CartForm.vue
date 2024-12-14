@@ -3,57 +3,33 @@
     <label class="cart-form__select">
       <span class="cart-form__label">Получение заказа:</span>
 
-      <BaseSelect
-        class="cart-form__select-control"
-        name="mode"
-        v-model="currentMode"
-        :options="modes"
-        @input="changeAddressByMode"
-      />
+      <BlockSelect name="test" v-model="mode" :options="modes" />
     </label>
 
-    <BaseInput
-      name="phone"
+    <BlockInput
       label="Контактный телефон:"
-      big-label
+      bigLabel
       placeholder="+7 999-999-99-99"
-      v-model="currentPhone"
+      name="tel"
+      v-model="tel"
     />
 
-    <div class="cart-form__address" v-if="address">
-      <span class="cart-form__label">
-        {{ currentMode === "new" ? "Новый адрес" : "Адрес" }}:
-      </span>
+    <div class="cart-form__address" v-if="mode !== 'no'">
+      <span class="cart-form__label">Новый адрес:</span>
 
-      <div class="cart-form__input">
-        <BaseInput
-          name="street"
-          label="Улица*"
-          :readonly="currentMode !== 'new'"
-          required
-          v-model="address.street"
-          @input="$emit('updateAddress', { street: $event })"
-        />
-      </div>
-
-      <div class="cart-form__input cart-form__input--small">
-        <BaseInput
-          name="building"
-          label="Дом*"
-          :readonly="currentMode !== 'new'"
-          required
-          v-model="address.building"
-          @input="$emit('updateAddress', { building: $event })"
-        />
-      </div>
-
-      <div class="cart-form__input cart-form__input--small">
-        <BaseInput
-          name="flat"
-          label="Квартира"
-          :readonly="currentMode !== 'new'"
-          v-model="address.flat"
-          @input="$emit('updateAddress', { flat: $event })"
+      <div
+        v-for="field of addressFields"
+        :key="field.name"
+        class="cart-form__input"
+        :class="{ 'cart-form__input--small': field.small }"
+      >
+        <BlockInput
+          :label="`${field.label}${field.required ? '*' : ''}`"
+          :name="field.name"
+          :readonly="mode === 'profile'"
+          :required="field.required"
+          v-model="field.value"
+          @input="changeDelivery({ [field.name]: $event })"
         />
       </div>
     </div>
@@ -63,92 +39,76 @@
 <script>
 export default {
   name: "CartForm",
-
   props: {
-    addresses: {
-      type: Array,
+    delivery: {
+      type: Object,
       required: true,
     },
-
-    address: {
-      type: Object,
-      default: null,
-    },
-
-    phone: {
-      type: String,
-      default: "",
-    },
   },
-
   data() {
     return {
-      currentMode: this.chooseMode(),
+      modes: {
+        no: "Заберу сам",
+        new: "Новый адрес",
+        profile: "Существующий адрес",
+      },
     };
   },
-
   computed: {
-    currentPhone: {
+    mode: {
       get() {
-        return this.phone;
+        return this.delivery.mode;
       },
-
-      set(phone) {
-        this.$emit("changePhone", phone);
+      set(mode) {
+        this.changeDelivery({ mode });
       },
     },
-
-    modes() {
+    tel: {
+      get() {
+        return this.delivery.tel;
+      },
+      set(tel) {
+        this.changeDelivery({ tel });
+      },
+    },
+    addressFields() {
       return [
         {
-          id: "self",
-          name: "Заберу сам",
+          small: false,
+          label: "Улица",
+          name: "street",
+          value: this.delivery.street,
+          required: true,
         },
         {
-          id: "new",
-          name: "Новый адрес",
+          small: true,
+          label: "Дом",
+          name: "house",
+          value: this.delivery.house,
+          required: true,
         },
-        ...this.addresses.map(({ id, name }) => ({
-          id: `${id}`,
-          name,
-        })),
+        {
+          small: true,
+          label: "Квартира",
+          name: "apartment",
+          value: this.delivery.apartment,
+          required: false,
+        },
       ];
     },
   },
-
   methods: {
-    chooseMode() {
-      if (this.address) {
-        return `${this.address.id || "new"}`;
-      }
-
-      return "self";
-    },
-
-    changeAddressByMode() {
-      switch (this.currentMode) {
-        case "self":
-          this.$emit("changeAddress", null);
-          break;
-        case "new":
-          this.$emit("changeAddress", {
-            street: "",
-            building: "",
-            flat: "",
-          });
-          break;
-        default:
-          this.$emit(
-            "changeAddress",
-            this.addresses.find(({ id }) => id === +this.currentMode) || null
-          );
-      }
+    changeDelivery(addition) {
+      this.$emit("input", {
+        ...this.delivery,
+        ...addition,
+      });
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-form {
   display: flex;
   align-items: center;
@@ -160,13 +120,13 @@ export default {
   align-items: center;
   margin-right: auto;
 
-  .cart-form__label {
+  span {
     margin-right: 16px;
   }
-}
 
-.cart-form__select-control {
-  max-width: 172px;
+  select {
+    max-width: 172px;
+  }
 }
 
 .cart-form__label {

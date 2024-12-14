@@ -1,74 +1,50 @@
 <template>
   <header class="header">
-    <BaseLogo class="header__logo" />
+    <BlockLogo class="header__logo" />
 
-    <div v-if="content" class="header__cart">
-      <RouterLink class="header__cart-link" to="/cart">
-        <OrderPrice
-          class="header__linktext"
-          :content="content"
-          :pizzas="currentOrder.pizzas"
-          :misc="currentOrder.misc"
-        />
-      </RouterLink>
+    <div class="header__cart">
+      <RouterLink to="/cart">{{ formattedOrderPrice }} ₽</RouterLink>
     </div>
-
-    <div v-if="content" class="header__user">
-      <template v-if="user">
-        <RouterLink class="header__user-link" to="/profile">
-          <BasePicture
-            className="userpic"
-            :srcset="[user.srcset.x1, user.srcset.x2]"
-            :webpset="[user.webpset.x1, user.webpset.x2]"
+    <div class="header__user">
+      <template v-if="user.name">
+        <RouterLink to="/profile">
+          <BlockPicture
+            :srcset="['users/user5.jpg', 'users/user5@2x.jpg']"
+            :webpset="['users/user5.webp', 'users/user5@2x.webp']"
             :alt="user.name"
             width="32"
             height="32"
-            remote
           />
-          <span class="header__linktext">{{ user.name }}</span>
+          <span>{{ user.name }}</span>
         </RouterLink>
 
-        <a class="header__logout" href="/" @click.prevent="logout">
-          <span class="header__linktext">Выйти</span>
+        <a class="header__logout" href="/" @click.prevent="logoutHandler">
+          <span>Выйти</span>
         </a>
       </template>
-
       <RouterLink v-else class="header__login" to="/login">
-        <span class="header__linktext">Войти</span>
+        <span>Войти</span>
       </RouterLink>
     </div>
   </header>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import OrderPrice from "@/modules/orders/components/OrderPrice.vue";
+import { orderPriceMixin } from "@/common/mixins";
 
 export default {
   name: "AppLayoutHeader",
-
-  components: { OrderPrice },
-
+  mixins: [orderPriceMixin],
   props: {
-    content: {
-      type: Object,
-      default: null,
-    },
-
     user: {
       type: Object,
-      default: null,
+      required: true,
     },
   },
-
-  computed: {
-    ...mapState("Cart", ["currentOrder"]),
-  },
-
   methods: {
-    async logout() {
-      await this.$store.dispatch("Profile/logout");
-      this.$notifier.success("Вы успешно вышли");
+    logoutHandler() {
+      // Временное решение
+      this.$emit("logout");
 
       if (this.$route.path !== "/") {
         this.$router.push("/");
@@ -78,12 +54,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header {
   position: relative;
   z-index: 2;
   display: flex;
-  min-height: 61px;
   padding: 0 2.12%;
   background-color: $green-500;
   box-shadow: $shadow-light;
@@ -94,80 +69,91 @@ export default {
 }
 
 .header__cart {
+  margin-right: 10px;
   margin-left: auto;
-}
 
-.header__cart-link {
-  @include b-s16-h19;
+  a {
+    @include b-s16-h19;
 
-  display: block;
+    display: block;
 
-  padding-top: 21px;
-  padding-right: 15px;
-  padding-bottom: 21px;
-  padding-left: 58px;
+    padding-top: 21px;
+    padding-right: 15px;
+    padding-bottom: 21px;
+    padding-left: 58px;
 
-  transition: 0.3s;
+    transition: 0.3s;
 
-  color: $white;
-  background-color: $green-500;
-  background-image: url("~@/assets/img/cart.svg");
-  background-repeat: no-repeat;
-  background-position: 20px center;
-  background-size: 29px 27px;
+    color: $white;
+    background-color: $green-500;
+    background-image: url("~@/assets/img/cart.svg");
+    background-repeat: no-repeat;
+    background-position: 20px center;
+    background-size: 29px 27px;
 
-  &:hover:not(:active) {
-    background-color: $green-400;
-  }
+    &:hover:not(:active) {
+      background-color: $green-400;
+    }
 
-  &:active {
-    background-color: $green-600;
-  }
+    &:active {
+      background-color: $green-600;
+    }
 
-  &:focus {
-    opacity: 0.5;
+    &:focus {
+      opacity: 0.5;
+    }
   }
 }
 
 .header__user {
   display: flex;
   align-items: center;
-}
 
-.header__linktext {
-  @include r-s14-h16;
+  a {
+    display: block;
 
-  display: inline-block;
+    padding-top: 14px;
+    padding-right: 20px;
+    padding-bottom: 14px;
+    padding-left: 20px;
 
-  vertical-align: middle;
+    transition: 0.3s;
 
-  color: $white;
-}
+    background-color: $green-500;
 
-.header__user-link,
-.header__logout,
-.header__login {
-  display: block;
+    &:hover:not(:active) {
+      background-color: $green-400;
+    }
 
-  padding-top: 14px;
-  padding-right: 20px;
-  padding-bottom: 14px;
-  padding-left: 20px;
+    &:active {
+      background-color: $green-600;
+    }
 
-  transition: 0.3s;
-
-  background-color: $green-500;
-
-  &:hover:not(:active) {
-    background-color: $green-400;
+    &:focus {
+      opacity: 0.5;
+    }
   }
 
-  &:active {
-    background-color: $green-600;
+  img {
+    display: inline-block;
+
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+
+    vertical-align: middle;
+
+    border-radius: 50%;
   }
 
-  &:focus {
-    opacity: 0.5;
+  span {
+    @include r-s14-h16;
+
+    display: inline-block;
+
+    vertical-align: middle;
+
+    color: $white;
   }
 }
 

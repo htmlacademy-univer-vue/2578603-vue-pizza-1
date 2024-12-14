@@ -1,16 +1,14 @@
 <template>
   <div class="product">
-    <BasePicture
+    <BlockPicture
       :srcset="['product.svg']"
       :alt="pizza.name"
       width="56"
       height="56"
     />
-
     <div class="product__text">
-      <h2 class="product__title">{{ pizza.name }}</h2>
-
-      <ul class="product__list">
+      <h2>{{ pizza.name }}</h2>
+      <ul>
         <li>{{ size }}, на {{ dough }} тесте</li>
         <li>Соус: {{ sauce }}</li>
         <li>Начинка: {{ ingredients }}</li>
@@ -20,47 +18,34 @@
 </template>
 
 <script>
-import { findItemById } from "@/common/utils";
+import { findItemByAlias } from "@/common/utils";
+import { contentPropMixin } from "@/common/mixins";
 
 export default {
   name: "ProductCard",
-
+  mixins: [contentPropMixin],
   props: {
-    content: {
-      type: Object,
-      required: true,
-    },
-
     pizza: {
       type: Object,
       required: true,
     },
   },
-
   computed: {
     dough() {
-      const { name } = findItemById(this.content.dough, this.pizza.doughId);
+      const { name } = findItemByAlias(this.content.dough, this.pizza.dough);
       return `${name.slice(0, -1).toLowerCase()}м`;
     },
-
     sauce() {
-      const { name } = findItemById(this.content.sauces, this.pizza.sauceId);
+      const { name } = findItemByAlias(this.content.sauces, this.pizza.sauce);
       return name.toLowerCase();
     },
-
     size() {
-      const { name } = findItemById(this.content.sizes, this.pizza.sizeId);
+      const { name } = findItemByAlias(this.content.sizes, this.pizza.size);
       return name;
     },
-
     ingredients() {
       return this.content.ingredients
-        .filter(
-          ({ id }) =>
-            this.pizza.ingredients.find(
-              ({ ingredientId }) => ingredientId === id
-            ).quantity
-        )
+        .filter(({ alias }) => this.pizza.ingredients[alias])
         .map(({ name }) => name.toLowerCase())
         .join(", ");
     },
@@ -68,7 +53,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .product {
   display: flex;
   align-items: center;
@@ -76,17 +61,17 @@ export default {
 
 .product__text {
   margin-left: 15px;
-}
 
-.product__title {
-  @include b-s18-h21;
+  h2 {
+    @include b-s18-h21;
 
-  margin-top: 0;
-  margin-bottom: 10px;
-}
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
 
-.product__list {
-  @include clear-list;
-  @include l-s11-h13;
+  ul {
+    @include clear-list;
+    @include l-s11-h13;
+  }
 }
 </style>
