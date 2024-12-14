@@ -1,23 +1,20 @@
 <template>
   <header class="header">
-    <BaseLogo class="header__logo" />
+    <BlockLogo class="header__logo" />
 
     <div v-if="content" class="header__cart">
-      <RouterLink class="header__cart-link" to="/cart">
+      <RouterLink to="/cart">
         <OrderPrice
-          class="header__linktext"
           :content="content"
           :pizzas="currentOrder.pizzas"
           :misc="currentOrder.misc"
         />
       </RouterLink>
     </div>
-
     <div v-if="content" class="header__user">
       <template v-if="user">
-        <RouterLink class="header__user-link" to="/profile">
-          <BasePicture
-            className="userpic"
+        <RouterLink to="/profile">
+          <BlockPicture
             :srcset="[user.srcset.x1, user.srcset.x2]"
             :webpset="[user.webpset.x1, user.webpset.x2]"
             :alt="user.name"
@@ -25,16 +22,15 @@
             height="32"
             remote
           />
-          <span class="header__linktext">{{ user.name }}</span>
+          <span>{{ user.name }}</span>
         </RouterLink>
 
         <a class="header__logout" href="/" @click.prevent="logout">
-          <span class="header__linktext">Выйти</span>
+          <span>Выйти</span>
         </a>
       </template>
-
       <RouterLink v-else class="header__login" to="/login">
-        <span class="header__linktext">Войти</span>
+        <span>Войти</span>
       </RouterLink>
     </div>
   </header>
@@ -46,28 +42,23 @@ import OrderPrice from "@/modules/orders/components/OrderPrice.vue";
 
 export default {
   name: "AppLayoutHeader",
-
   components: { OrderPrice },
-
   props: {
     content: {
       type: Object,
       default: null,
     },
-
     user: {
       type: Object,
       default: null,
     },
   },
-
   computed: {
     ...mapState("Cart", ["currentOrder"]),
   },
-
   methods: {
     async logout() {
-      await this.$store.dispatch("Profile/logout");
+      await this.$store.dispatch("User/logout");
       this.$notifier.success("Вы успешно вышли");
 
       if (this.$route.path !== "/") {
@@ -78,7 +69,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header {
   position: relative;
   z-index: 2;
@@ -94,80 +85,91 @@ export default {
 }
 
 .header__cart {
+  margin-right: 10px;
   margin-left: auto;
-}
 
-.header__cart-link {
-  @include b-s16-h19;
+  a {
+    @include b-s16-h19;
 
-  display: block;
+    display: block;
 
-  padding-top: 21px;
-  padding-right: 15px;
-  padding-bottom: 21px;
-  padding-left: 58px;
+    padding-top: 21px;
+    padding-right: 15px;
+    padding-bottom: 21px;
+    padding-left: 58px;
 
-  transition: 0.3s;
+    transition: 0.3s;
 
-  color: $white;
-  background-color: $green-500;
-  background-image: url("~@/assets/img/cart.svg");
-  background-repeat: no-repeat;
-  background-position: 20px center;
-  background-size: 29px 27px;
+    color: $white;
+    background-color: $green-500;
+    background-image: url("~@/assets/img/cart.svg");
+    background-repeat: no-repeat;
+    background-position: 20px center;
+    background-size: 29px 27px;
 
-  &:hover:not(:active) {
-    background-color: $green-400;
-  }
+    &:hover:not(:active) {
+      background-color: $green-400;
+    }
 
-  &:active {
-    background-color: $green-600;
-  }
+    &:active {
+      background-color: $green-600;
+    }
 
-  &:focus {
-    opacity: 0.5;
+    &:focus {
+      opacity: 0.5;
+    }
   }
 }
 
 .header__user {
   display: flex;
   align-items: center;
-}
 
-.header__linktext {
-  @include r-s14-h16;
+  a {
+    display: block;
 
-  display: inline-block;
+    padding-top: 14px;
+    padding-right: 20px;
+    padding-bottom: 14px;
+    padding-left: 20px;
 
-  vertical-align: middle;
+    transition: 0.3s;
 
-  color: $white;
-}
+    background-color: $green-500;
 
-.header__user-link,
-.header__logout,
-.header__login {
-  display: block;
+    &:hover:not(:active) {
+      background-color: $green-400;
+    }
 
-  padding-top: 14px;
-  padding-right: 20px;
-  padding-bottom: 14px;
-  padding-left: 20px;
+    &:active {
+      background-color: $green-600;
+    }
 
-  transition: 0.3s;
-
-  background-color: $green-500;
-
-  &:hover:not(:active) {
-    background-color: $green-400;
+    &:focus {
+      opacity: 0.5;
+    }
   }
 
-  &:active {
-    background-color: $green-600;
+  img {
+    display: inline-block;
+
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+
+    vertical-align: middle;
+
+    border-radius: 50%;
   }
 
-  &:focus {
-    opacity: 0.5;
+  span {
+    @include r-s14-h16;
+
+    display: inline-block;
+
+    vertical-align: middle;
+
+    color: $white;
   }
 }
 

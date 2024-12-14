@@ -1,17 +1,16 @@
 <template>
   <div class="filling">
-    <p class="filling__title">Начинка:</p>
+    <p>Начинка:</p>
 
     <ul class="filling__list">
       <li
         v-for="(ingredient, i) of mergedIngredients"
-        :key="`ingredient-${ingredient.id}`"
+        :key="ingredient.id"
         class="filling__item"
       >
         <AppDrag
           :transferData="{ ingredientId: ingredient.id }"
           :draggable="ingredient.quantity < max"
-          :data-test="`ingredient-${ingredient.id}`"
         >
           <span
             :class="`filling__name`"
@@ -21,7 +20,7 @@
           </span>
         </AppDrag>
 
-        <BaseCounter
+        <BlockCounter
           class="filling__counter"
           v-model.number="ingredient.quantity"
           :max="max"
@@ -37,25 +36,21 @@ import { MAX_INGREDIENT_QUANTITY } from "@/common/constants";
 
 export default {
   name: "BuilderFillingSelector",
-
   props: {
     ingredients: {
       type: Array,
       required: true,
     },
-
     value: {
       type: Array,
       required: true,
     },
   },
-
   data() {
     return {
       max: MAX_INGREDIENT_QUANTITY,
     };
   },
-
   computed: {
     mergedIngredients() {
       return this.ingredients.map((item) => {
@@ -70,7 +65,6 @@ export default {
       });
     },
   },
-
   methods: {
     inputHandler(quantity, i) {
       const newValue = this.value.slice();
@@ -82,14 +76,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .filling {
   width: 100%;
-}
 
-.filling__title {
-  margin-top: 24px;
-  margin-bottom: 16px;
+  p {
+    margin-top: 24px;
+    margin-bottom: 16px;
+  }
 }
 
 .filling__list {

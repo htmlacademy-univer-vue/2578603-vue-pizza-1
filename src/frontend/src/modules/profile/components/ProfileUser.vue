@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-    <BasePicture
+    <BlockPicture
       :srcset="[user.srcset.x2, user.srcset.x4]"
       :webpset="[user.webpset.x2, user.webpset.x4]"
       :alt="user.name"
@@ -10,12 +10,11 @@
     />
 
     <div class="user__name">
-      {{ user.name }}
+      <span>{{ user.name }}</span>
     </div>
 
     <p class="user__phone">
-      Контактный телефон:
-      <span class="user__phone-value">{{ user.phone }}</span>
+      Контактный телефон: <span>{{ user.phone }}</span>
     </p>
   </div>
 </template>
@@ -23,7 +22,6 @@
 <script>
 export default {
   name: "ProfileUser",
-
   props: {
     user: {
       type: Object,
@@ -33,7 +31,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .user {
   display: flex;
   flex-wrap: wrap;
@@ -44,6 +42,12 @@ export default {
   @include b-s20-h23;
 
   margin-left: 30px;
+
+  span {
+    display: inline-block;
+
+    vertical-align: middle;
+  }
 }
 
 .user__phone {
@@ -51,9 +55,9 @@ export default {
 
   width: 100%;
   margin-top: 20px;
-}
 
-.user__phone-value {
-  font-weight: 400;
+  span {
+    font-weight: 400;
+  }
 }
 </style>

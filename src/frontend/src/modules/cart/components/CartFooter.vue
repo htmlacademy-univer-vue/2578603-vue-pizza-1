@@ -5,12 +5,10 @@
     <p class="cart-footer__text">
       Перейти к конструктору<br />чтоб собрать ещё одну пиццу
     </p>
-
     <div class="cart-footer__price">
       <b>
         Итого:
         <OrderPrice
-          class="cart-footer__price-value"
           :content="content"
           :pizzas="currentOrder.pizzas"
           :misc="currentOrder.misc"
@@ -19,13 +17,9 @@
     </div>
 
     <div class="cart-footer__submit">
-      <BaseButton
-        class="cart-footer__button"
-        type="submit"
-        :disabled="!isValid || isSending"
-      >
+      <BlockButton type="submit" :disabled="!isValid || isSending">
         Оформить заказ
-      </BaseButton>
+      </BlockButton>
     </div>
   </footer>
 </template>
@@ -36,28 +30,23 @@ import CartMore from "@/modules/cart/components/CartMore.vue";
 
 export default {
   name: "AppLayoutFooter",
-
   components: {
     OrderPrice,
     CartMore,
   },
-
   props: {
     content: {
       type: Object,
       required: true,
     },
-
     currentOrder: {
       type: Object,
       required: true,
     },
-
     isSending: {
       type: Boolean,
       default: false,
     },
-
     isValid: {
       type: Boolean,
       default: false,
@@ -66,7 +55,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-footer {
   display: flex;
   align-items: center;
@@ -95,7 +84,9 @@ export default {
   margin-left: auto;
 }
 
-.cart-footer__button {
-  padding: 16px 14px;
+.cart-footer__submit {
+  button {
+    padding: 16px 14px;
+  }
 }
 </style>

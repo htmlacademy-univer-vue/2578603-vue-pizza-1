@@ -1,20 +1,22 @@
 <template>
-  <BaseSheet class="address-form" :class="{ 'address-form--opened': edited }">
+  <BlockSheet class="address-form" :class="{ 'address-form--opened': edited }">
     <div class="address-form__header">
-      <b class="address-form__title">
+      <b>
         {{ currentAddress.id ? `Адрес № ${currentAddress.id}` : "Новый адрес"
         }}{{ edited || !currentAddress.name ? "" : `. ${currentAddress.name}` }}
       </b>
 
       <div v-if="!edited" class="address-form__edit">
-        <BaseEditButton @click="edited = true"> Изменить адрес </BaseEditButton>
+        <BlockEditButton @click="edited = true">
+          Изменить адрес
+        </BlockEditButton>
       </div>
     </div>
 
     <template v-if="edited">
       <div class="address-form__wrapper">
         <div class="address-form__input">
-          <BaseInput
+          <BlockInput
             label="Название адреса*"
             name="name"
             placeholder="Введите название адреса"
@@ -22,9 +24,8 @@
             v-model="currentAddress.name"
           />
         </div>
-
         <div class="address-form__input address-form__input--size--normal">
-          <BaseInput
+          <BlockInput
             label="Улица*"
             name="street"
             placeholder="Введите название улицы"
@@ -32,9 +33,8 @@
             v-model="currentAddress.street"
           />
         </div>
-
         <div class="address-form__input address-form__input--size--small">
-          <BaseInput
+          <BlockInput
             label="Дом*"
             name="building"
             placeholder="Введите номер дома"
@@ -42,18 +42,16 @@
             v-model="currentAddress.building"
           />
         </div>
-
         <div class="address-form__input address-form__input--size--small">
-          <BaseInput
+          <BlockInput
             label="Квартира"
             name="flat"
             placeholder="Введите № квартиры"
             v-model="currentAddress.flat"
           />
         </div>
-
         <div class="address-form__input">
-          <BaseInput
+          <BlockInput
             label="Комментарий"
             name="comment"
             placeholder="Введите комментарий"
@@ -63,40 +61,19 @@
       </div>
 
       <div class="address-form__buttons">
-        <BaseButton
-          class="address-form__button"
-          data-test="delete-address"
-          transparent
-          @click="$emit('delete')"
-        >
+        <BlockButton transparent @click="$emit('delete')">
           Удалить
-        </BaseButton>
-
-        <BaseButton
-          class="address-form__button"
-          data-test="save-address"
-          :disabled="disabled"
-          @click="changeHandler"
-        >
+        </BlockButton>
+        <BlockButton :disabled="disabled" @click="changeHandler">
           Сохранить
-        </BaseButton>
+        </BlockButton>
       </div>
     </template>
-
     <template v-else>
-      <p class="address-form__text" data-test="address-output">
-        {{ formattedAddress }}
-      </p>
-
-      <p
-        class="address-form__text"
-        data-test="comment-output"
-        v-if="currentAddress.comment"
-      >
-        {{ currentAddress.comment }}
-      </p>
+      <p>{{ formattedAddress }}</p>
+      <p v-if="currentAddress.comment">{{ currentAddress.comment }}</p>
     </template>
-  </BaseSheet>
+  </BlockSheet>
 </template>
 
 <script>
@@ -104,35 +81,29 @@ import { formatAddress } from "@/modules/profile/helpers";
 
 export default {
   name: "ProfileAddressForm",
-
   props: {
     address: {
       type: Object,
       required: true,
     },
   },
-
   data() {
     return {
       edited: !this.address.id,
     };
   },
-
   computed: {
     currentAddress() {
       return this.address;
     },
-
     formattedAddress() {
       return formatAddress(this.currentAddress);
     },
-
     disabled() {
       const { name, street, building } = this.currentAddress;
       return !name || !street || !building;
     },
   },
-
   methods: {
     changeHandler() {
       this.$emit("change");
@@ -142,7 +113,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .address-form {
   $bl: &;
 
@@ -157,17 +128,21 @@ export default {
       padding-bottom: 18px;
     }
   }
-}
 
-.address-form__text {
-  @include r-s16-h19;
+  p {
+    @include r-s16-h19;
 
-  margin-top: 0;
-  margin-bottom: 16px;
-  padding: 0 16px;
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding: 0 16px;
+  }
 
-  &:last-child {
-    margin-bottom: 0;
+  small {
+    @include l-s11-h13;
+
+    display: block;
+
+    padding: 0 16px;
   }
 }
 
@@ -200,11 +175,11 @@ export default {
   justify-content: flex-end;
 
   padding: 0 16px;
-}
 
-.address-form__button {
-  margin-left: 16px;
-  padding: 16px 27px;
+  button {
+    margin-left: 16px;
+    padding: 16px 27px;
+  }
 }
 
 .address-form__header {
