@@ -8,7 +8,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-more {
   box-sizing: border-box;
   padding: 16px 0;

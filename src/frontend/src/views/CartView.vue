@@ -7,15 +7,15 @@
       method="post"
       @submit.prevent="handleOrder"
     >
-      <BaseContent class="cart__content" title="Корзина">
-        <BaseSheet>
+      <BlockContent class="cart__content" title="Корзина">
+        <BlockSheet>
           <CartList
             class="cart__list"
             :content="content"
             :pizzas="currentOrder.pizzas"
             @changePizzas="updateOrder({ pizzas: $event })"
           />
-        </BaseSheet>
+        </BlockSheet>
 
         <div class="cart__additional">
           <CartMiscList
@@ -36,7 +36,7 @@
             @order="handleOrder"
           />
         </div>
-      </BaseContent>
+      </BlockContent>
 
       <CartFooter
         class="cart__footer"
@@ -47,16 +47,16 @@
       />
     </form>
 
-    <BaseContent v-else class="cart__content" title="Корзина">
-      <BaseSheet class="cart__empty">
+    <BlockContent v-else class="cart__content" title="Корзина">
+      <BlockSheet class="cart__empty">
         <p>{{ emptyMessage }}</p>
-      </BaseSheet>
-    </BaseContent>
+      </BlockSheet>
+    </BlockContent>
 
     <Transition name="fade" @after-leave="leaveCart">
-      <BasePopup class="cart__popup" v-if="isSended" @close="isSended = false">
+      <BlockPopup class="cart__popup" v-if="isSended" @close="isSended = false">
         <CartStatus @close="isSended = false" />
-      </BasePopup>
+      </BlockPopup>
     </Transition>
   </div>
 </template>
@@ -104,7 +104,7 @@ export default {
   },
 
   computed: {
-    ...mapState("Profile", ["addresses"]),
+    ...mapState("User", ["addresses"]),
 
     ...mapState("Cart", ["currentOrder"]),
 
@@ -165,13 +165,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart__order {
   display: flex;
   flex-direction: column;
-
-  // Учитываем высоту хедера, чтобы прибить футер к низу
-  min-height: calc(100vh - 61px);
+  min-height: calc(
+    100vh - 61px
+  ); // Учитываем высоту хедера, чтобы прибить футер к низу
 }
 
 .cart__content {

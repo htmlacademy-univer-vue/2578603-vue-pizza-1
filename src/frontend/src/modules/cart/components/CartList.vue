@@ -1,6 +1,6 @@
 <template>
   <ul class="cart-list">
-    <CartListItem
+    <CartItem
       class="cart-list__item"
       v-for="(pizza, i) of pizzas"
       :key="`pizza-${i}`"
@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import CartListItem from "@/modules/cart/components/CartListItem.vue";
+import CartItem from "@/modules/cart/components/CartItem.vue";
 
 export default {
   name: "CartList",
 
-  components: { CartListItem },
+  components: { CartItem },
 
   props: {
     content: {
@@ -49,7 +49,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-list {
   @include clear-list;
 

@@ -1,8 +1,8 @@
 <template>
   <div class="profile">
-    <BaseHeading class="profile__title">
+    <BlockHeading class="profile__title">
       {{ $route.meta.title }}
-    </BaseHeading>
+    </BlockHeading>
 
     <ProfileUser class="profile__user" :user="user" />
 
@@ -23,15 +23,15 @@
       @delete="newAddress = null"
     />
 
-    <BaseButton
-      v-if="!newAddress"
-      class="profile__button"
-      data-test="new-address"
-      bordered
-      @click="newAddress = createAddress(user.id)"
-    >
-      Добавить новый адрес
-    </BaseButton>
+    <div v-if="!newAddress" class="profile__button">
+      <BlockButton
+        data-test="new-address"
+        bordered
+        @click="newAddress = createAddress(user.id)"
+      >
+        Добавить новый адрес
+      </BlockButton>
+    </div>
   </div>
 </template>
 
@@ -43,11 +43,6 @@ import ProfileAddressForm from "@/modules/profile/components/ProfileAddressForm.
 
 export default {
   name: "ProfileView",
-
-  meta: {
-    layout: "AppLayoutWithSidebar",
-    title: "Мои данные",
-  },
 
   components: {
     ProfileUser,
@@ -68,15 +63,15 @@ export default {
   },
 
   computed: {
-    ...mapState("Profile", ["addresses"]),
+    ...mapState("User", ["addresses"]),
   },
 
   methods: {
-    ...mapActions("Profile", ["updateAddress", "deleteAddress"]),
+    ...mapActions("User", ["updateAddress", "deleteAddress"]),
 
     async addAddress() {
       const { id = null } = await this.$store.dispatch(
-        "Profile/addAddress",
+        "User/addAddress",
         this.newAddress
       );
 
@@ -90,7 +85,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .profile__title {
   margin: 0 0 27px;
 }
@@ -105,6 +100,9 @@ export default {
 
 .profile__button {
   margin: 40px 0;
-  padding: 12px 23px;
+
+  button {
+    padding: 12px 23px;
+  }
 }
 </style>

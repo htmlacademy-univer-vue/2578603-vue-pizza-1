@@ -1,72 +1,76 @@
 <template>
-  <BaseSheet class="order">
+  <BlockSheet class="order">
     <div class="order__wrapper">
-      <div class="order__number">Заказ #{{ currentOrder.id }}</div>
-
-      <div class="order__sum">
-        Сумма заказа:
-        <OrderPrice
-          class="order__price"
-          :content="content"
-          :pizzas="currentOrder.pizzas"
-          :misc="currentOrder.misc"
-        >
-        </OrderPrice>
+      <div class="order__number">
+        <b>Заказ #{{ currentOrder.id }}</b>
       </div>
 
-      <BaseButton
-        class="order__button"
-        bordered
-        :data-test="`delete-order-${currentOrder.id}`"
-        @click="$emit('deleteOrder', currentOrder)"
-      >
-        Удалить
-      </BaseButton>
+      <div class="order__sum">
+        <span>
+          Сумма заказа:
+          <OrderPrice
+            class="order__price"
+            :content="content"
+            :pizzas="currentOrder.pizzas"
+            :misc="currentOrder.misc"
+          />
+        </span>
+      </div>
 
-      <BaseButton
-        class="order__button"
-        :data-test="`repeat-order-${currentOrder.id}`"
-        @click="repeatHandler"
-      >
-        Повторить
-      </BaseButton>
+      <div class="order__button">
+        <BlockButton
+          bordered
+          :data-test="`delete-order-${currentOrder.id}`"
+          @click="$emit('deleteOrder', currentOrder)"
+        >
+          Удалить
+        </BlockButton>
+      </div>
+
+      <div class="order__button">
+        <BlockButton
+          :data-test="`repeat-order-${currentOrder.id}`"
+          @click="repeatHandler"
+        >
+          Повторить
+        </BlockButton>
+      </div>
     </div>
 
-    <ul class="order__list" v-if="currentOrder.pizzas.length">
+    <ul v-if="currentOrder.pizzas.length" class="order__list">
       <li
-        class="order__item"
         v-for="pizza of currentOrder.pizzas"
         :key="pizza.name"
+        class="order__item"
       >
-        <ProductCard :content="content" :pizza="pizza">
-          <p class="order__price">
-            {{ pizza.counter > 1 ? `${pizza.counter}x` : "" }}
-            <OrderPrice
-              :content="content"
-              :pizzas="[pizza]"
-              :custom-counter="1"
-            >
-            </OrderPrice>
-          </p>
-        </ProductCard>
+        <ProductCard :content="content" :pizza="pizza" />
+
+        <p class="order__price">
+          {{ pizza.counter > 1 ? `${pizza.counter}x` : "" }}
+          <OrderPrice
+            :content="content"
+            :pizzas="[pizza]"
+            :custom-counter="1"
+          />
+        </p>
       </li>
     </ul>
 
-    <ul class="order__additional" v-if="misc.length">
+    <ul v-if="misc.length" class="order__additional">
       <li
-        class="order__misc"
         v-for="{ id, image, name, price, quantity } of misc"
         :key="id"
+        class="order__misc"
       >
-        <BasePicture
-          className="left"
+        <BlockPicture
           :srcset="[image]"
           :alt="name"
           width="20"
           height="30"
           remote
         />
-        <p class="order__misc-content">
+
+        <p>
           <span class="order__misc-name">{{ name }}</span>
           <b class="order__misc-price">
             {{ quantity > 1 ? `${quantity}x` : "" }}{{ price }} ₽
@@ -75,8 +79,8 @@
       </li>
     </ul>
 
-    <p class="order__address" v-if="address">Адрес доставки: {{ address }}</p>
-  </BaseSheet>
+    <p v-if="address" class="order__address">Адрес доставки: {{ address }}</p>
+  </BlockSheet>
 </template>
 
 <script>
@@ -136,7 +140,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .order__wrapper {
   display: flex;
   align-items: center;
@@ -144,23 +148,30 @@ export default {
   padding: 6px 16px;
 
   border-bottom: 1px solid rgba($green-500, 0.1);
+
+  b {
+    font-size: 14px;
+  }
+
+  span {
+    @include b-s14-h16;
+  }
+
+  button {
+    padding: 8px 26px;
+  }
 }
 
 .order__number {
   margin-right: auto;
-  font-weight: 700;
-  font-size: 14px;
 }
 
 .order__sum {
-  @include b-s14-h16;
-
   margin-right: 16px;
 }
 
 .order__button {
   margin-left: 16px;
-  padding: 8px 26px;
 }
 
 .order__list {
@@ -187,7 +198,6 @@ export default {
   @include b-s16-h19;
 
   margin: 0 0 0 32px;
-  font-size: 14px;
 
   white-space: nowrap;
 }
@@ -201,22 +211,28 @@ export default {
 
   margin-bottom: 5px;
   padding-left: 80px;
-}
 
-.order__misc {
-  @include b-s11-h16;
+  li {
+    @include b-s11-h16;
 
-  width: 130px;
-  margin-right: 24px;
-  margin-bottom: 10px;
-}
+    width: 130px;
+    margin-right: 24px;
+    margin-bottom: 10px;
+  }
 
-.order__misc-price {
-  display: block;
-}
+  p {
+    margin: 0;
+  }
 
-.order__misc-content {
-  margin: 0;
+  img {
+    float: left;
+
+    margin-right: 7px;
+  }
+
+  b {
+    display: block;
+  }
 }
 
 .order__address {

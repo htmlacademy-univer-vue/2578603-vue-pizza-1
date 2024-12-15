@@ -1,8 +1,8 @@
 <template>
   <div class="orders">
-    <BaseHeading class="orders__title">
+    <BlockHeading class="orders__title">
       {{ $route.meta.title }}
-    </BaseHeading>
+    </BlockHeading>
 
     <template v-if="orders.length">
       <OrderCard
@@ -27,11 +27,6 @@ import OrderCard from "@/modules/orders/components/OrderCard.vue";
 
 export default {
   name: "OrdersView",
-
-  meta: {
-    layout: "AppLayoutWithSidebar",
-    title: "История заказов",
-  },
 
   components: {
     OrderCard,
@@ -63,7 +58,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .orders__card {
   margin-bottom: 32px;
 }

@@ -19,13 +19,9 @@
     </div>
 
     <div class="cart-footer__submit">
-      <BaseButton
-        class="cart-footer__button"
-        type="submit"
-        :disabled="!isValid || isSending"
-      >
+      <BlockButton type="submit" :disabled="!isValid || isSending">
         Оформить заказ
-      </BaseButton>
+      </BlockButton>
     </div>
   </footer>
 </template>
@@ -66,7 +62,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cart-footer {
   display: flex;
   align-items: center;
@@ -95,7 +91,9 @@ export default {
   margin-left: auto;
 }
 
-.cart-footer__button {
-  padding: 16px 14px;
+.cart-footer__submit {
+  button {
+    padding: 16px 14px;
+  }
 }
 </style>

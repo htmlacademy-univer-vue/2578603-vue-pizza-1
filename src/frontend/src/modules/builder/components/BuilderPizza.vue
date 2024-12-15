@@ -65,7 +65,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .pizza {
   position: relative;
   background-size: 100%;

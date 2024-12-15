@@ -1,6 +1,6 @@
 <template>
   <div class="filling">
-    <p class="filling__title">Начинка:</p>
+    <p>Начинка:</p>
 
     <ul class="filling__list">
       <li
@@ -21,7 +21,7 @@
           </span>
         </AppDrag>
 
-        <BaseCounter
+        <BlockCounter
           class="filling__counter"
           v-model.number="ingredient.quantity"
           :max="max"
@@ -82,14 +82,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .filling {
   width: 100%;
-}
 
-.filling__title {
-  margin-top: 24px;
-  margin-bottom: 16px;
+  p {
+    margin-top: 24px;
+    margin-bottom: 16px;
+  }
 }
 
 .filling__list {

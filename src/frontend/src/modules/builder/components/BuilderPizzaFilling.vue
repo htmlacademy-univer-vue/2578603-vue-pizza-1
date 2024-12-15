@@ -37,7 +37,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .pizza-filling {
   position: absolute;
   top: 0;

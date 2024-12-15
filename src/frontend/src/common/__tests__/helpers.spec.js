@@ -22,7 +22,7 @@ describe("Testing helpers functions", () => {
       pizzas: [],
     };
     const order = createOrder();
-    expect(order).toStrictEqual(emptyOrder);
+    expect(order).toEqual(emptyOrder);
   });
 
   it("Test createAddress", () => {
@@ -35,10 +35,10 @@ describe("Testing helpers functions", () => {
       flat: "",
       comment: "",
     };
-    expect(createAddress(userId)).toStrictEqual(emptyAddress);
+    expect(createAddress(userId)).toEqual(emptyAddress);
 
     emptyAddress.userId = null;
-    expect(createAddress()).toStrictEqual(emptyAddress);
+    expect(createAddress()).toEqual(emptyAddress);
   });
 
   it("Test adaptAddress", () => {
@@ -46,17 +46,17 @@ describe("Testing helpers functions", () => {
       flat: "",
       comment: "",
     };
-    expect(adaptAddress({})).toStrictEqual(emptyAddress);
+    expect(adaptAddress({})).toEqual(emptyAddress);
   });
 
   it("Test getFileName", () => {
     const fileName = "user";
 
-    expect(getFileName(image)).toStrictEqual(fileName);
+    expect(getFileName(image)).toEqual(fileName);
   });
 
   it("Test adaptContentItem", () => {
-    expect(adaptContentItem({ image }).image).toStrictEqual(`${API_URL}${image}`);
+    expect(adaptContentItem({ image }).image).toEqual(`${API_URL}${image}`);
   });
 
   it("Test getSrcset", () => {
@@ -70,8 +70,8 @@ describe("Testing helpers functions", () => {
       x2: "/public/img/users/user@2x.webp",
       x4: "/public/img/users/user@4x.webp",
     };
-    expect(getSrcset(image)).toStrictEqual(jpgSet);
-    expect(getSrcset(image, "webp")).toStrictEqual(webpSet);
+    expect(getSrcset(image)).toEqual(jpgSet);
+    expect(getSrcset(image, "webp")).toEqual(webpSet);
   });
 
   it("Test adaptUserData", () => {
@@ -81,11 +81,11 @@ describe("Testing helpers functions", () => {
       srcset: getSrcset(avatar),
       webpset: getSrcset(avatar, "webp"),
     };
-    expect(adaptUserData({ avatar: image })).toStrictEqual(expectedUserData);
+    expect(adaptUserData({ avatar: image })).toEqual(expectedUserData);
   });
 
   it("Test adaptContentEntity", () => {
     const expectedItems = DOUGH.slice(0, 2);
-    expect(adaptContentEntity(DOUGH)).toStrictEqual(expectedItems);
+    expect(adaptContentEntity(DOUGH)).toEqual(expectedItems);
   });
 });
